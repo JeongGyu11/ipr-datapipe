@@ -1,0 +1,72 @@
+name: insurance-document-crawler
+
+services:
+  # 조회 API와 lifespan APScheduler가 함께 실행되는 FastAPI 백엔드.
+  api:
+    image: insurance-document-crawler:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    env_file:
+      - .env
+    init: true
+    shm_size: "1gb"
+    environment:
+      CRAWLER_CONFIG_PATH: /app/config.container.yaml
+      IPR_SCHEDULE_CRON: "${IPR_SCHEDULE_CRON:-0 3 * * *}"
+      IPR_SCHEDULE_TIMEZONE: "${IPR_SCHEDULE_TIMEZONE:-Asia/Seoul}"
+      IPR_SCHEDULE_PERIOD_MODE: "${IPR_SCHEDULE_PERIOD_MODE:-previous_day}"
+      IPR_SCHEDULE_COMPANIES: "${IPR_SCHEDULE_COMPANIES:-}"
+      IPR_SCHEDULE_TARGET_MONTH: "${IPR_SCHEDULE_TARGET_MONTH:-}"
+      IPR_SCHEDULE_START_DATE: "${IPR_SCHEDULE_START_DATE:-}"
+      IPR_SCHEDULE_END_DATE: "${IPR_SCHEDULE_END_DATE:-}"
+      IPR_SCHEDULE_MISFIRE_GRACE: "${IPR_SCHEDULE_MISFIRE_GRACE:-3600}"
+      IPR_LOG_DIR: /var/log/insurance-document-crawler
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - type: bind
+        # 반드시 상품공시실문서의 부모인 IPR 경로를 지정한다.
+        source: "${CRAWLER_OUTPUT_HOST_PATH:-/mnt/fileserver/FAS/7.제안공유/04. 진행중/349.밀리만/상품리서치 Ai Agent/IPR}"
+        target: /data
+        bind:
+          create_host_path: false
+      - crawler-local-state:/var/lib/insurance-document-crawler/state
+      - crawler-local-staging:/var/lib/insurance-document-crawler/staging
+      - crawler-logs:/var/log/insurance-document-crawler
+    restart: unless-stopped
+    stop_grace_period: "${API_STOP_GRACE_PERIOD:-30m}"
+    healthcheck:
+      test: ["CMD-SHELL", "/app/.venv/bin/python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3)\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+  # 기존 CLI를 실행하는 수동·smoke test·복구용 one-shot worker.
+  collector:
+    image: insurance-document-crawler:latest
+    profiles: ["manual"]
+    entrypoint: ["/app/docker/entrypoints/collector-xvfb.sh"]
+    env_file:
+      - .env
+    init: true
+    shm_size: "1gb"
+    environment:
+      CRAWLER_CONFIG_PATH: /app/config.container.yaml
+      IPR_LOG_DIR: /var/log/insurance-document-crawler
+    volumes:
+      - type: bind
+        source: "${CRAWLER_OUTPUT_HOST_PATH:-/mnt/fileserver/FAS/7.제안공유/04. 진행중/349.밀리만/상품리서치 Ai Agent/IPR}"
+        target: /data
+        bind:
+          create_host_path: false
+      - crawler-local-state:/var/lib/insurance-document-crawler/state
+      - crawler-local-staging:/var/lib/insurance-document-crawler/staging
+      - crawler-logs:/var/log/insurance-document-crawler
+    stop_grace_period: "${COLLECTOR_STOP_GRACE_PERIOD:-30m}"
+
+volumes:
+  crawler-local-state:
+  crawler-local-staging:
+  crawler-logs:

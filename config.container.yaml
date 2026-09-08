@@ -1,0 +1,10 @@
+# Docker Desktop WSL2 Linux 컨테이너 전용 overlay.
+# 보험사/다운로드 설정은 config.yaml을 정본으로 사용하고 출력 경로만 덮어쓴다.
+extends: config.yaml
+
+output:
+  base_path: /data
+  root_folder: "상품공시실문서"
+  storage_kind: smb
+  local_state_path: /var/lib/insurance-document-crawler/state
+  local_staging_path: /var/lib/insurance-document-crawler/staging

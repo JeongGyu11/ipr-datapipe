@@ -1,0 +1,69 @@
+# 상품공시 문서 자동 다운로드 - 실행 설정
+# 보험사 코드·이름·URL·수집 상태의 정본은 crawler/company_catalog.py입니다.
+
+target_month: null
+
+output:
+  base_path: '\\Fileserver\data\FAS\7.제안공유\04. 진행중\349.밀리만\상품리서치 Ai Agent\IPR'
+  root_folder: "상품공시실문서"
+
+crawler:
+  request_interval_seconds: 2
+  request_timeout_seconds: 30
+  max_retries: 3
+  max_concurrent_requests_per_domain: 1
+  retry_backoff_seconds: [3, 10, 30]
+  retry_status_codes: [408, 429, 500, 502, 503, 504]
+  headless: true          # 메리츠화재는 웹방화벽 때문에 headless를 강제로 false로 내립니다.
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+
+# 대상 월 선정 방식
+#   new_or_revised : 대상 월에 새로 등록/개정(판매개시)된 버전만 수집
+#   overlap        : 판매기간이 대상 월과 겹치는 모든 버전 수집
+date_selection:
+  mode: "new_or_revised"
+
+download:
+  allowed_extensions: [".pdf", ".hwp", ".hwpx", ".doc", ".docx", ".zip"]
+  allowed_content_types:
+    - "application/pdf"
+    - "application/x-pdf"
+    - "application/octet-stream"
+    - "application/haansofthwp"
+    - "application/x-hwp"
+    - "application/vnd.hancom.hwp"
+    - "application/vnd.hancom.hwpx"
+    - "application/msword"
+    - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    - "application/zip"
+    - "application/x-zip-compressed"
+  max_path_length: 240
+
+document_types:
+  policy:
+    - "약관"
+    - "보통약관"
+    - "특별약관"
+    - "보험약관"
+    - "상품약관"
+  summary:
+    - "상품요약서"
+    - "상품요약"
+    - "요약서"
+    - "요약"
+  method:
+    - "사업방법서"
+    - "사업방법"
+
+# 기본 수집 제외 자료
+document_exclude_keywords:
+  - "보험료 예시"
+  - "보험료예시"
+  - "가입설계서"
+  - "핵심설명서"
+  - "비교안내서"
+  - "확인서"
+  - "안내장"
+  - "브로슈어"
+  - "상품설명서"
+  - "청약서"

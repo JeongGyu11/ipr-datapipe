@@ -1,0 +1,107 @@
+{
+  "run_id": "20260731_141400_ffb8d7",
+  "computer_name": "CRAWLER-PC",
+  "process_id": 18420,
+  "git_commit": "abc1234",
+  "target_month": null,
+  "scope_key": "20260701_20260731",
+  "period_start": "2026-07-01",
+  "period_end": "2026-07-31",
+  "period": {
+    "start": "2026-07-01",
+    "end": "2026-07-31"
+  },
+  "date_selection_mode": "new_or_revised",
+  "dry_run": false,
+  "retry_failed": false,
+  "write_plan": true,
+  "refresh_active": true,
+  "refresh_active_only": false,
+  "rename_dry_run": false,
+  "started_at": "2026-07-31T14:14:01",
+  "finished_at": "2026-07-31T14:15:27",
+  "elapsed_seconds": 87.3,
+  "layout_version": 3,
+  "artifact_paths": {
+    "documents": "01_문서",
+    "operations": "99_운영",
+    "run": "99_운영/runs/2026/07/31/20260731_141400_ffb8d7"
+  },
+  "companies": {
+    "DB": {
+      "name": "DB손해보험",
+      "url": "https://www.idbins.com/FWMAIV1534.do",
+      "collection_method": "1순위 - 공시실 화면 JSON API 재현 (기간검색)",
+      "active_status_candidates": 0,
+      "collected_versions": 6,
+      "selected_versions": 6,
+      "document_records": 18,
+      "document_links": 18,
+      "status_counts": {
+        "SUCCESS": 18
+      },
+      "document_type_counts": {
+        "POLICY": 6,
+        "SUMMARY": 6,
+        "METHOD": 6
+      },
+      "missing_documents": {
+        "POLICY": 0,
+        "SUMMARY": 0,
+        "METHOD": 0
+      },
+      "processed_versions": 6,
+      "products": 6,
+      "elapsed_seconds": 12.2,
+      "download_plan": "99_운영/state/20260701_20260731/DB/download_plan.v3.jsonl",
+      "planned_documents": 18,
+      "planned_months": {
+        "2026-07": 18
+      },
+      "status": "SUCCESS"
+    },
+    "LOTTE": {
+      "name": "롯데손해보험",
+      "url": "https://www.lotteins.co.kr/web/C/D/H/cdh190.jsp",
+      "collection_method": "2순위 - 폼 POST + 정적 HTML 파싱",
+      "active_status_candidates": 0,
+      "collected_versions": 4391,
+      "selected_versions": 49,
+      "document_records": 145,
+      "document_links": 145,
+      "status_counts": {
+        "SUCCESS": 145
+      },
+      "document_type_counts": {
+        "POLICY": 49,
+        "SUMMARY": 47,
+        "METHOD": 49
+      },
+      "missing_documents": {
+        "POLICY": 0,
+        "SUMMARY": 2,
+        "METHOD": 0
+      },
+      "processed_versions": 49,
+      "products": 49,
+      "elapsed_seconds": 3.4,
+      "download_plan": "99_운영/state/20260701_20260731/LOTTE/download_plan.v3.jsonl",
+      "planned_documents": 145,
+      "planned_months": {
+        "2026-07": 145
+      },
+      "status": "SUCCESS"
+    }
+  },
+  "status_counts": {
+    "SUCCESS": 163
+  },
+  "total_records": 163,
+  "locked_companies": [],
+  "failed_companies": [],
+  "run_status": "SUCCESS",
+  "plan_paths": {
+    "DB": "99_운영/state/20260701_20260731/DB/download_plan.v3.jsonl",
+    "LOTTE": "99_운영/state/20260701_20260731/LOTTE/download_plan.v3.jsonl"
+  }
+}
